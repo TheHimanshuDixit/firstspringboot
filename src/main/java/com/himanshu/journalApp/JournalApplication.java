@@ -1,13 +1,13 @@
-package com.himanshu.firstspringboot;
+package com.himanshu.journalApp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class FirstspringbootApplication {
+public class JournalApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(FirstspringbootApplication.class, args);
+		SpringApplication.run(JournalApplication.class, args);
 	}
 
 }
