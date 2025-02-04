@@ -1,22 +1,30 @@
 package com.himanshu.journalApp.entity;
 
+import java.util.Date;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "journal")
 public class JournalEntry {
-    private String idString;
+    @Id
+    private ObjectId idString;
     private String title;
     private String content;
-    private String date;
+    private Date date;
 
     public JournalEntry() {
     }
 
-    public JournalEntry(String idString, String title, String content, String date) {
+    public JournalEntry(ObjectId idString, String title, String content, Date date) {
         this.idString = idString;
         this.title = title;
         this.content = content;
         this.date = date;
     }
 
-    public String getIdString() {
+    public ObjectId getIdString() {
         return idString;
     }
 
@@ -28,11 +36,11 @@ public class JournalEntry {
         return content;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setIdString(String idString) {
+    public void setIdString(ObjectId idString) {
         this.idString = idString;
     }
 
@@ -44,7 +52,7 @@ public class JournalEntry {
         this.content = content;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 }

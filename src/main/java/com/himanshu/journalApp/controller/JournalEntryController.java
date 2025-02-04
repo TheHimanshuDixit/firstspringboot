@@ -1,11 +1,10 @@
 package com.himanshu.journalApp.controller;
 
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,42 +15,52 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himanshu.journalApp.entity.JournalEntry;
+import com.himanshu.journalApp.service.JournalEntryService;
 
 @RestController
 @RequestMapping("/journal")
 public class JournalEntryController {
 
-    private Map<String, JournalEntry> journalEntries = new HashMap<>();
+    @Autowired
+    private JournalEntryService journalEntryService;
 
     @GetMapping
     public List<JournalEntry> getAll() {
-        return new ArrayList<>(journalEntries.values());
+        return journalEntryService.getAllEntries();
     }
 
     @PostMapping
     public boolean addJournalEntry(@RequestBody JournalEntry journalEntry) {
-        journalEntries.put(journalEntry.getIdString(), journalEntry);
+        journalEntry.setDate(new Date());
+        journalEntryService.saveEntry(journalEntry);
         return true;
     }
 
     // get journal by idString
     @GetMapping("/id/{idString}")
-    public JournalEntry getJournalEntry(@PathVariable String idString) {
-        return journalEntries.get(idString);
+    public JournalEntry getJournalEntry(@PathVariable ObjectId idString) {
+        return journalEntryService.getEntryById(idString);
     }
 
     // delete journal by idString
     @DeleteMapping("/id/{idString}")
-    public boolean deleteJournalEntry(@PathVariable String idString) {
-        journalEntries.remove(idString);
+    public boolean deleteJournalEntry(@PathVariable ObjectId idString) {
+        journalEntryService.deleteEntryById(idString);
         return true;
     }
 
     // update journal by idString
     @PutMapping("/id/{idString}")
-    public boolean updateJournalEntry(@PathVariable String idString, @RequestBody JournalEntry journalEntry) {
-        journalEntries.put(idString, journalEntry);
-        return true;
+    public JournalEntry updateJournalEntry(@PathVariable ObjectId idString, @RequestBody JournalEntry journalEntry) {
+        JournalEntry entry = journalEntryService.getEntryById(idString);
+        if (entry == null) {
+            return null;
+        }
+        entry.setTitle(journalEntry.getTitle() != null ? journalEntry.getTitle() : entry.getTitle());
+        entry.setContent(journalEntry.getContent() != null ? journalEntry.getContent() : entry.getContent());
+        journalEntryService.saveEntry(entry);
+
+        return entry;
     }
 
 }
