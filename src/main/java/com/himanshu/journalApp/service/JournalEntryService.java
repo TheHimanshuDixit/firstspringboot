@@ -6,6 +6,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.himanshu.journalApp.entity.JournalEntry;
 import com.himanshu.journalApp.entity.User;
@@ -13,35 +14,59 @@ import com.himanshu.journalApp.repository.JournalEntryRepository;
 
 @Component
 public class JournalEntryService {
-    
+
     @Autowired
     private JournalEntryRepository journalEntryRepository;
 
     @Autowired
     private UserService userService;
 
+    @Transactional
     public void saveEntry(JournalEntry journalEntry, User user) {
-        journalEntry.setDate(new Date());
-        JournalEntry data = journalEntryRepository.save(journalEntry);
-        user.getJournalEntries().add(data);
-        userService.saveUser(user);
+        try {
+            journalEntry.setDate(new Date());
+            JournalEntry data = journalEntryRepository.save(journalEntry);
+            user.getJournalEntries().add(data);
+            userService.saveUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveEntry(JournalEntry journalEntry) {
-        journalEntryRepository.save(journalEntry);
+        try {
+            journalEntryRepository.save(journalEntry);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public List<JournalEntry> getAllEntries() {
-        return journalEntryRepository.findAll();
+        try {
+            return journalEntryRepository.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of(); // return an empty list in case of an exception
+        }
     }
 
     public JournalEntry getEntryById(ObjectId idString) {
-        return journalEntryRepository.findById(idString).orElse(null);
+        try {
+            return journalEntryRepository.findById(idString).orElse(null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null; // return null in case of an exception
+        }
     }
 
+    @Transactional
     public void deleteEntryById(ObjectId idString, User user) {
-        journalEntryRepository.deleteById(idString);
-        user.getJournalEntries().removeIf(entry -> entry.getIdString().equals(idString));
-        userService.saveUser(user);
+        try {
+            journalEntryRepository.deleteById(idString);
+            user.getJournalEntries().removeIf(entry -> entry.getIdString().equals(idString));
+            userService.saveUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
