@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.himanshu.journalApp.entity.JournalEntry;
+import com.himanshu.journalApp.entity.User;
 import com.himanshu.journalApp.service.JournalEntryService;
+import com.himanshu.journalApp.service.UserService;
 
 @RestController
 @RequestMapping("/journal")
@@ -26,11 +28,18 @@ public class JournalEntryController {
     @Autowired
     private JournalEntryService journalEntryService;
 
-    @GetMapping
-    public ResponseEntity<List<JournalEntry>> getAll() {
+    @Autowired
+    private UserService userService;
+
+    @GetMapping("{username}")
+    public ResponseEntity<List<JournalEntry>> getAllEntriesOfUser(@PathVariable String username) {
         try {
-            List<JournalEntry> data = journalEntryService.getAllEntries();
-            if(data.isEmpty()) {
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            List<JournalEntry> data = user.getJournalEntries();
+            if (data.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
             return new ResponseEntity<>(data, HttpStatus.OK);
@@ -39,11 +48,15 @@ public class JournalEntryController {
         }
     }
 
-    @PostMapping
-    public ResponseEntity<JournalEntry> addJournalEntry(@RequestBody JournalEntry journalEntry) {
+    @PostMapping("{username}")
+    public ResponseEntity<JournalEntry> addJournalEntry(@RequestBody JournalEntry journalEntry,
+            @PathVariable String username) {
         try {
-            journalEntry.setDate(new Date());
-            journalEntryService.saveEntry(journalEntry);
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            journalEntryService.saveEntry(journalEntry, user);
             return new ResponseEntity<>(journalEntry, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -66,10 +79,14 @@ public class JournalEntryController {
     }
 
     // delete journal by idString
-    @DeleteMapping("/id/{idString}")
-    public ResponseEntity<?> deleteJournalEntry(@PathVariable ObjectId idString) {
+    @DeleteMapping("/id/{username}/{idString}")
+    public ResponseEntity<?> deleteJournalEntry(@PathVariable ObjectId idString, @PathVariable String username) {
         try {
-            journalEntryService.deleteEntryById(idString);
+            User user = userService.getUserByUsername(username);
+            if (user == null) {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+            journalEntryService.deleteEntryById(idString, user);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -77,8 +94,9 @@ public class JournalEntryController {
     }
 
     // update journal by idString
-    @PutMapping("/id/{idString}")
+    @PutMapping("/id/{username}/{idString}")
     public ResponseEntity<JournalEntry> updateJournalEntry(@PathVariable ObjectId idString,
+            @PathVariable String username,
             @RequestBody JournalEntry journalEntry) {
         try {
             JournalEntry entry = journalEntryService.getEntryById(idString);
