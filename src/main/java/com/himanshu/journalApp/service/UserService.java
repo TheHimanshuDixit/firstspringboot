@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.himanshu.journalApp.entity.User;
 import com.himanshu.journalApp.repository.UserRepository;
 
+@Component
 public class UserService {
     @Autowired
     private UserRepository userRepository;
