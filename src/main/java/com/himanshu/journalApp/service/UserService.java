@@ -1,9 +1,12 @@
 package com.himanshu.journalApp.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import com.himanshu.journalApp.entity.User;
@@ -14,10 +17,14 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    private static final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     public void saveUser(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(Arrays.asList("USER"));
         userRepository.save(user);
     }
-    
+
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
@@ -34,8 +41,8 @@ public class UserService {
         userRepository.deleteById(id);
     }
 
-    public void deleteUserByUsername(String username) {
-        userRepository.deleteByUsername(username);
+    public User deleteUserByUsername(String username) {
+        return userRepository.deleteByUsername(username);
     }
 
 }

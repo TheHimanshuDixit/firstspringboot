@@ -1,6 +1,5 @@
 package com.himanshu.journalApp.controller;
 
-import java.util.Date;
 import java.util.List;
 
 import org.bson.types.ObjectId;
