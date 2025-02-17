@@ -1,0 +1,19 @@
+# spring.data.mongodb.host=localhost
+# spring.data.mongodb.port=27017
+spring:
+  main:
+    allow-circular-references: true
+  application:
+    name: firstspringboot
+  data:
+    mongodb:
+      uri: mongodb+srv://himanshujava:y9jbjEmF5H8zy1yJ@cluster0.gjfylo1.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      database: journaldb
+      auto-index-creation: true
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+#Priority:
+# cmd line > .properties file > .yml file > .yaml file
