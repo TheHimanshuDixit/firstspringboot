@@ -27,7 +27,7 @@ public class JournalEntryService {
             journalEntry.setDate(new Date());
             JournalEntry data = journalEntryRepository.save(journalEntry);
             user.getJournalEntries().add(data);
-            userService.saveUser(user);
+            userService.updateUser(user);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -60,13 +60,18 @@ public class JournalEntryService {
     }
 
     @Transactional
-    public void deleteEntryById(ObjectId idString, User user) {
+    public boolean deleteEntryById(ObjectId idString, User user) {
         try {
+            boolean removed = user.getJournalEntries().removeIf(entry -> entry.getIdString().equals(idString));
+            if (!removed) {
+                return false;
+            }
+            userService.updateUser(user);
             journalEntryRepository.deleteById(idString);
-            user.getJournalEntries().removeIf(entry -> entry.getIdString().equals(idString));
-            userService.saveUser(user);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
+            return false;
         }
     }
 }
