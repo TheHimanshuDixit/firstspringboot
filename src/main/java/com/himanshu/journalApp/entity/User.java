@@ -18,7 +18,6 @@ import lombok.Data;
 @Data
 @Builder
 public class User {
-
     @Id
     private ObjectId id;
     @Indexed(unique = true)
