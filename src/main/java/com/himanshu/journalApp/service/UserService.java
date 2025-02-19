@@ -12,7 +12,10 @@ import org.springframework.stereotype.Component;
 import com.himanshu.journalApp.entity.User;
 import com.himanshu.journalApp.repository.UserRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Component
+@Slf4j
 public class UserService {
     @Autowired
     private UserRepository userRepository;
@@ -37,7 +40,12 @@ public class UserService {
     }
 
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        try {
+            return userRepository.findAll();
+        } catch (Exception e) {
+            log.error("Error while fetching all users", e);
+            return List.of(); // return an empty list in case of an exception
+        }
     }
 
     public User getUserById(ObjectId id) {

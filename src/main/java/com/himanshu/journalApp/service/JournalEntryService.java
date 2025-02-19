@@ -2,8 +2,10 @@ package com.himanshu.journalApp.service;
 
 import java.util.Date;
 import java.util.List;
+import org.slf4j.Logger;
 
 import org.bson.types.ObjectId;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,8 @@ public class JournalEntryService {
     @Autowired
     private UserService userService;
 
+    private static final Logger logger = LoggerFactory.getLogger(JournalEntryService.class);
+
     @Transactional
     public void saveEntry(JournalEntry journalEntry, User user) {
         try {
@@ -29,7 +33,7 @@ public class JournalEntryService {
             user.getJournalEntries().add(data);
             userService.updateUser(user);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while saving journal entry", e);
         }
     }
 
@@ -37,7 +41,7 @@ public class JournalEntryService {
         try {
             journalEntryRepository.save(journalEntry);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while saving journal entry", e);
         }
     }
 
@@ -45,7 +49,7 @@ public class JournalEntryService {
         try {
             return journalEntryRepository.findAll();
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while fetching all journal entries", e);
             return List.of(); // return an empty list in case of an exception
         }
     }
@@ -54,7 +58,7 @@ public class JournalEntryService {
         try {
             return journalEntryRepository.findById(idString).orElse(null);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while fetching journal entry by id", e);
             return null; // return null in case of an exception
         }
     }
@@ -70,7 +74,7 @@ public class JournalEntryService {
             journalEntryRepository.deleteById(idString);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Error while deleting journal entry by id", e);
             return false;
         }
     }
