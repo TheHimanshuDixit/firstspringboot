@@ -26,7 +26,9 @@ public class User {
     @NonNull
     private String password;
     @DBRef
+    @Builder.Default
     private List<JournalEntry> journalEntries = new ArrayList<>();
+    @Builder.Default
     private List<String> roles = new ArrayList<>();
     
 }

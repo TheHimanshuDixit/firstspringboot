@@ -1,23 +1,23 @@
 package com.himanshu.journalApp.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+// import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ArgumentsSource;
-import org.junit.jupiter.params.provider.CsvSource;
+// import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+// import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.repository.query.Param;
+// import org.springframework.data.repository.query.Param;
 
 import com.himanshu.journalApp.entity.User;
 import com.himanshu.journalApp.repository.UserRepository;
 
-import net.bytebuddy.asm.MemberSubstitution.Argument;
+// import net.bytebuddy.asm.MemberSubstitution.Argument;
 
 @SpringBootTest
 public class UserServiceTests {
