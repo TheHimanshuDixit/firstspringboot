@@ -14,9 +14,11 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.himanshu.journalApp.repository.UserRepository;
 
+// @ActiveProfiles("dev")
 public class UserDetailsServiceImplTests {
 
     @InjectMocks
