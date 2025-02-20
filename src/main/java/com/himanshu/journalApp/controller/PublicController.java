@@ -17,8 +17,11 @@ import com.himanshu.journalApp.service.UserDetailsServiceImpl;
 import com.himanshu.journalApp.service.UserService;
 import com.himanshu.journalApp.utils.JwtUtil;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/public")
+@Tag(name = "Public", description = "Public API")
 public class PublicController {
 
     @Autowired

@@ -13,8 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.himanshu.journalApp.entity.User;
 import com.himanshu.journalApp.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/user")
+@Tag(name = "User", description = "User API")
 public class UserController {
 
     @Autowired

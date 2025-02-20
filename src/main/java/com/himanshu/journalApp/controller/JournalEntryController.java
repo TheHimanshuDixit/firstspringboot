@@ -23,8 +23,11 @@ import com.himanshu.journalApp.entity.User;
 import com.himanshu.journalApp.service.JournalEntryService;
 import com.himanshu.journalApp.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/journal")
+@Tag(name = "Journal Entry", description = "Journal Entry API")
 public class JournalEntryController {
 
     @Autowired
